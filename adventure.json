@@ -1,3 +1,12 @@
 {
-  "key1": "this is some text"
+  "context": [
+    "You are standing at the entrance of a supermarket.",
+    "You are out of milk, and want to buy some."
+  ],
+
+  "choices": [
+    "Leave the supermarket.",
+    "Go to the freezer aisle.",
+    "Go to the produce section."
+  ]
 }
