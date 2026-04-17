@@ -1,0 +1,49 @@
+{
+  "__meta__": {
+    "title":        "\"For Example\"",
+    "subtitle":     "The Exemplary Journey.",
+    "prompt_start": "Your time has come, press enter to begin...",
+    "prompt_end":   "..."
+  },
+
+  "__main__": {
+    "_": {
+      "context": [
+        "You stand at the foot of the cathedral, Exempli Gratia.",
+        "The double-doors' stare pierces through you."
+      ],
+      "choices": [
+        {
+          "text": "Enter the cathedral.",
+          "next": "cathedral-main_hall",
+
+          "on_select": {
+            "set": [ "cathedral-have_entered" ]
+          }
+        },
+        {
+          "text": "Do not.",
+          "next": "ending-leave_immediately",
+
+          "hide_if": "cathedral-have_entered"
+        }
+      ]
+    },
+
+    "cathedral-main_hall": {
+      "context": [
+        "You enter the main hall. The ceilings dizzy you.",
+        "You feel at home, in spite of yourself."
+      ],
+      "choices": [
+        {
+          "text": "Leave.", "next": "_"
+        }
+      ]
+    },
+
+    "ending-leave_immediately": {
+      "context": "You don't look back."
+    }
+  }
+}
