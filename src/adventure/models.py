@@ -20,10 +20,8 @@ BOX_CHARS_DEFAULT = "─│╭╮╰╯"
 
 # util
 
-def cls() -> None:
-    print("\n" * 2)
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print("\n" * 3)
+def spacer() -> None:
+    print("\n\n***\n\n")
 
 def load_json(filename: str) -> Any:
     file = open(filename)
@@ -122,10 +120,10 @@ class Adventure:
             scenario_key: str = SCENARIO_KEY_DEFAULT
     ):
         self.title_screen()
+        spacer()
         while scenario_key is not None:
-            cls()
             scenario_key = self.do_scenario(scenario_key)
-        print()
+            print()
         self.end_screen()
 
     def title_screen(self):
@@ -214,9 +212,10 @@ class Adventure:
                     self,
                     raw: dict[str, Any]
             ) -> None:
-                self._text        = raw.get("text") # err if no text
-                self._show_condit = raw.get("show_if", None)
-                self._hide_condit = raw.get("hide_if", None)
+                self._text        = raw.get("text"           ) # err if no text
+                self._follow_up   = raw.get("follow_up", None)
+                self._show_condit = raw.get("show_if",   None)
+                self._hide_condit = raw.get("hide_if",   None)
 
                 self._on_select: dict[str, list[str]] = {
                     "set":   str_list(raw.get("on_select", {}).get("set",   [])), # wrap into list
@@ -250,6 +249,9 @@ class Adventure:
                     flags.add(f) # mut
                 for f in self._on_select["clear"]:
                     flags.remove(f) # mut
+
+                if self._follow_up not in ("", None):
+                    print(f"\n{F_ITALIC}{self._follow_up}{F_RESET}")
 
                 return self._next_scenario_key
 
@@ -294,7 +296,6 @@ class Adventure:
                 idx = int(user_input) - 1
                 if 0 <= idx < len(choices):
                     choice = choices[idx]
-                    print(f"You chose: \"{choice.text}\"")
                     return choice
             except ValueError:
                 pass

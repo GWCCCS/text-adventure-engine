@@ -7,7 +7,7 @@ from adventure import Adventure
 
 # const
 
-ADVENTURES_DIR = "res"
+ADVENTURES_DIR = "adventures"
 
 
 # util
@@ -28,7 +28,7 @@ def choose_file(dir: str) -> str:
 
 def main():
     filename = choose_file(ADVENTURES_DIR)
-    print("\n" * 2)
+    print("\n\n***\n\n")
     adventure = Adventure(filename)
     adventure.begin()
 
@@ -36,5 +36,5 @@ def main():
 # main
 
 if __name__ == '__main__':
-    print("\n" * 3)
+    print("\n" * 2)
     main()
