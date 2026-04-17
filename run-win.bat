@@ -27,7 +27,7 @@ echo.
 
 cls
 
-"%VENV_DIR%\Scripts\python.exe" "main.py"
+"%VENV_DIR%\Scripts\python.exe" "src/main.py"
 
 cls
 echo.Program stopped.
