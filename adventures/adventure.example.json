@@ -17,37 +17,272 @@
           "text":      "Enter the cathedral.",
           "follow_up": "You enter.",
 
-          "on_select": {
-            "set": [ "cathedral-have_entered" ]
-          },
-
-          "next": "cathedral-main_hall"
+          "next": "main_hall-start"
         },
         {
           "text":      "Do not.",
           "follow_up": "You do not.",
 
-          "hide_if": "cathedral-have_entered",
+          "hide_if": "resisted-0",
 
-          "next": "ending-leave_immediately"
+          "next": "ENDING-leave_immediately"
+        },
+        {
+          "text":      "(You must enter.)",
+          "follow_up": "(And you do.)",
+
+          "show_if": "resisted-0",
+
+          "next": "main_hall-start"
         }
       ]
     },
 
-    "cathedral-main_hall": {
+    "main_hall-start": {
       "context": [
-        "You enter the main hall. The ceilings dizzy you.",
+        "You are in the main hall. The ceilings dizzy you.",
         "You feel at home, in spite of yourself."
+      ],
+
+      "choices": [
+        { "text": "Let it wash over you.", "next": "extraction-0" },
+        {
+          "text":      "Leave.",
+          "follow_up": "Behind you, a rhythmic thumping.",
+
+          "hide_if": "resisted-0",
+
+          "on_select": {
+            "set": "resisted-0"
+          },
+
+          "next": "_"
+        },
+        {
+          "text": "Try to leave.",
+          "follow_up": [
+            "You freeze. You can't.",
+            "",
+            "There is something you lost.",
+            "(And something you gained.)"
+          ],
+
+          "show_if": "resisted-0",
+          "hide_if": "resisted-1",
+
+          "on_select": {
+            "set": "resisted-1"
+          },
+
+          "next": "main_hall-start"
+        }
+      ]
+    },
+
+    "extraction-0": {
+      "context": [
+        "You look deeply into the architecture, seeing yourself in the murals and supporting beams.",
+        "It brings you great fear not knowing what you will find - should you proceed."
+      ],
+      "choices": [
+        { "text": "Continue.", "next": "extraction-1" },
+        {
+          "text": "Stop, while you can.",
+          "follow_up": [
+            "(Can you?)"
+          ],
+
+          "hide_if": "resisted-0",
+
+          "on_select": {
+            "set": [ "resisted-0" ]
+          },
+
+          "next": "main_hall-start"
+        }
+      ]
+    },
+
+    "extraction-1": {
+      "context": [
+        "You fall to your knees. Your vision blackens.",
+        "There is a stinging wetness on your face.",
+        "You feel a hot vapor engulfing you."
       ],
       "choices": [
         {
-          "text": "Leave.", "next": "_"
+          "text":      "Do nothing.",
+          "follow_up": "...",
+
+          "next": "extraction-last"
+        },
+        {
+          "text": "Do something. (Have you no will?)",
+          "follow_up": [
+            "(Indeed you have none.)",
+            "",
+            "Nothing happened."
+          ],
+
+          "hide_if": "resisted-0",
+
+          "next": "extraction-last"
+        },
+        {
+          "text": "Do something. (Your will could be stronger.)",
+          "follow_up": [
+            "(But it was starved.)",
+            "",
+            "Nothing seemed to happen."
+          ],
+
+          "show_if": "resisted-0",
+          "hide_if": "resisted-1",
+
+          "on_select": {
+            "set": "resisted-1"
+          },
+
+          "next": "extraction-last"
+        },
+        {
+          "text": "Do something. (Your will is strong.)",
+          "follow_up": [
+            "(Perhaps strong enough.)",
+            "",
+            "Nothing seemed to happen."
+          ],
+
+          "show_if": "resisted-1",
+
+          "on_select": {
+            "set": "resisted-2"
+          },
+
+          "next": "extraction-last"
         }
       ]
     },
 
-    "ending-leave_immediately": {
-      "context": "You don't look back."
+    "extraction-last": {
+      "context": [
+        "And you go numb.",
+        "",
+        "It deteriorates - what remains of your sense of self.",
+        "Although, you feel as though you must allow it to happen.",
+        "",
+        "You must submit.",
+        "You must not have will."
+      ],
+      "choices": [
+        { "text": "Submit.", "hide_if": "resisted-1", "next": "ENDING-extracted"         },
+        { "text": "Submit.", "hide_if": "resisted-2", "next": "ENDING-extracted"         },
+        { "text": "Submit.", "hide_if": "resisted-2", "next": "ENDING-extracted"         },
+        { "text": "Submit.", "hide_if": "resisted-2", "next": "ENDING-extracted"         },
+        { "text": "Submit.", "hide_if": "resisted-2", "next": "ENDING-extracted"         },
+        { "text": "Submit.", "hide_if": "resisted-2", "next": "ENDING-extracted"         },
+        { "text": "Submit.", "hide_if": "resisted-2", "next": "ENDING-extracted"         },
+        { "text": "Submit.", "hide_if": "resisted-2", "next": "ENDING-extracted"         },
+        { "text": "Submit?", "show_if": "resisted-2", "next": "ENDING-extraction_failed" },
+        { "text": "Submit?", "show_if": "resisted-2", "next": "ENDING-extraction_failed" },
+        { "text": "Submit?", "show_if": "resisted-2", "next": "ENDING-extraction_failed" },
+        {
+          "text": "(Resist.)",
+          "follow_up": [
+            "You open your eyes. The incessant spinning lets up.",
+            "",
+            "You peer into the reflective stained-glass, and see yourself.",
+            "You find your face covered in a silver, opaque substance.",
+            "You remember its sting."
+          ],
+
+          "show_if": "resisted-1",
+
+          "next": "main_hall"
+        },
+        { "text": "Submit.", "hide_if": "resisted-2", "next": "ENDING-extracted"         },
+        { "text": "Submit.", "hide_if": "resisted-2", "next": "ENDING-extracted"         },
+        { "text": "Submit?", "show_if": "resisted-2", "next": "ENDING-extraction_failed" },
+        { "text": "Submit?", "show_if": "resisted-2", "next": "ENDING-extraction_failed" },
+        { "text": "Submit?", "show_if": "resisted-2", "next": "ENDING-extraction_failed" },
+        { "text": "Submit?", "show_if": "resisted-2", "next": "ENDING-extraction_failed" },
+        { "text": "Submit?", "show_if": "resisted-2", "next": "ENDING-extraction_failed" },
+        { "text": "Submit?", "show_if": "resisted-2", "next": "ENDING-extraction_failed" }
+      ]
+    },
+
+    "main_hall": {
+      "context": [
+        "That dim, orange twilight which once lit the room has now faded.",
+        "All else remains changed; the hall is still.",
+        "You are afraid."
+      ],
+      "choices": [
+        {
+          "text": "Look around.",
+          "follow_up": [
+            "You look.",
+            "",
+            "...",
+            "",
+            "[and you see some stuff idk]"
+          ],
+
+          "hide_if": "looked_around",
+
+          "on_select": {
+            "set": "looked_around"
+          },
+
+          "next": "main_hall"
+        },
+        { "text":  "[interact w smthn you saw]", "show_if": "looked_around", "next": "main_hall" }
+      ]
+    },
+
+    "ENDING-leave_immediately": {
+      "context": [
+        "You don't look back."
+      ]
+    },
+
+    "ENDING-extracted": {
+      "context": [
+        "Of your life, you now infer that all but this one moment-",
+        "",
+        "This moment is all that matters now.",
+        "         It is all.",
+        "         It is all that matters.",
+        "                   That matters.",
+        "",
+        "All that was before is now beneath you.",
+        "                           Beneath you.",
+        "",
+        "You are not here, and yet you are.",
+        "                          You are.",
+        "You are not               you.",
+        "",
+        "(You failed to avoid extraction.)"
+      ]
+    },
+
+    "ENDING-extraction_failed": {
+      "context": [
+        "You cannot keep your eyes closed.",
+        "You                        lose.",
+        "",
+        "Your fear is too strong.",
+        "Your ego would not die.",
+        "You      would not die.",
+        "",
+        "You recall the wounds that which you hid from the world.",
+        "And you realize that they are precisely what kept you here.",
+        "    Recall      that they            hid          you.",
+        "And you                   are                         here.",
+        "    ",
+        "",
+        "(You narrowly avoided extraction.)"
+      ]
     }
   }
 }
