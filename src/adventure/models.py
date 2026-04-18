@@ -5,7 +5,6 @@ from __future__ import annotations # fix class/staticmethod return type hints
 from typing import Any
 
 import json
-import os
 
 
 # const
@@ -20,14 +19,15 @@ BOX_CHARS_DEFAULT = "─│╭╮╰╯"
 
 # util
 
-def spacer() -> None:
-    print("\n\n***\n\n")
-
 def load_json(filename: str) -> Any:
     file = open(filename)
     file_str = "".join(file.readlines())
     file.close()
     return json.loads(file_str)
+
+def str_list(arg: str|list[str]) -> list[str]:
+    if isinstance(arg, str): return [arg]
+    return arg
 
 def box_text(
         text:  str,
@@ -53,6 +53,9 @@ def box_text(
         bot_line,
     ])
 
+def print_spacer() -> None:
+    print("\n\n***\n\n")
+
 def print_title(
         title: str,
         title_chars: str,
@@ -65,12 +68,34 @@ def print_title(
     input(
         f"{F_BOLD}{title}{F_RESET}"
         f"{F_ITALIC}{subtitle}{F_RESET}"
-        f"{prompt}"
+        f"{F_BOLD}{prompt}{F_RESET}"
     )
 
-def str_list(arg: str|list[str]) -> list[str]:
-    if isinstance(arg, str): return [arg]
-    return arg
+def print_context(context: str|list[str]) -> None:
+    context = str_list(context)
+    print(f"{F_ITALIC}{"\n".join(context)}{F_RESET}")
+
+def print_directive(directive: str|list[str]) -> None:
+    directive = str_list(directive)
+    print(f"{F_BOLD}{"\n".join(directive)}{F_RESET}")
+
+def print_list(items: list[str]) -> None:
+    i_just = len(f"{len(items)}")
+    for i, item in enumerate(items):
+        i_str = f"{i+1}.".ljust(i_just+1)
+        print(f"{i_str} {item}")
+
+def prompt_list(items: list[str], prompt: str) -> int:
+    print_directive(f"{prompt}\n")
+    print_list(items)
+    while True:
+        user_input = input("> ")
+        try:
+            idx = int(user_input) - 1
+            if 0 <= idx < len(items):
+                return idx
+        except ValueError:
+            pass
 
 
 # main
@@ -89,7 +114,7 @@ class Adventure:
         "prompt_start": "Press enter to begin...",
         "prompt_end":   "Press enter to end...",
 
-        "the_end": "The End."
+        "the_end": "The End"
     }
 
     SCENARIO_DEFAULT = {
@@ -120,7 +145,7 @@ class Adventure:
             scenario_key: str = SCENARIO_KEY_DEFAULT
     ):
         self.title_screen()
-        spacer()
+        print_spacer()
         while scenario_key is not None:
             scenario_key = self.do_scenario(scenario_key)
             print()
@@ -149,7 +174,7 @@ class Adventure:
             scenario_key: str
     ) -> str|None:
         scenario = self._SCENARIOS[scenario_key]
-        choice = scenario.prompt_user(self._flags)
+        choice = scenario.prompt_choices(self._flags)
         if choice is None:
             return None
         return choice.choose(self._flags)
@@ -175,12 +200,20 @@ class Adventure:
 
         # method
 
-        def prompt_user(
+        def prompt_choices(
                 self,
                 flags: set[str]
-        ) -> Choice:
+        ) -> Choice|None:
             valid_choices = self._get_valid_choices(self._all_choices, flags)
-            return Adventure._prompt_choices(self._context, valid_choices)
+            print_context(self._context)
+            print()
+            if len(valid_choices) == 0:
+                return None # no options
+            idx = prompt_list(
+                [ choice.text for choice in valid_choices ],
+                self._prompt
+            )
+            return valid_choices[idx]
 
         # util
 
@@ -212,10 +245,10 @@ class Adventure:
                     self,
                     raw: dict[str, Any]
             ) -> None:
-                self._text        = raw.get("text"           ) # err if no text
-                self._follow_up   = raw.get("follow_up", None)
-                self._show_condit = raw.get("show_if",   None)
-                self._hide_condit = raw.get("hide_if",   None)
+                self._text        =          raw.get("text"           ) # err if no text
+                self._follow_up   = str_list(raw.get("follow_up", None))
+                self._show_condit =          raw.get("show_if",   None)
+                self._hide_condit =          raw.get("hide_if",   None)
 
                 self._on_select: dict[str, list[str]] = {
                     "set":   str_list(raw.get("on_select", {}).get("set",   [])), # wrap into list
@@ -251,7 +284,7 @@ class Adventure:
                     flags.remove(f) # mut
 
                 if self._follow_up not in ("", None):
-                    print(f"\n{F_ITALIC}{self._follow_up}{F_RESET}")
+                    print_context(f"\n{"\n".join(self._follow_up)}")
 
                 return self._next_scenario_key
 
@@ -276,26 +309,3 @@ class Adventure:
             k: cls.Scenario(v)
             for k, v in raw.items()
         }
-
-    @classmethod
-    def _prompt_choices(
-            cls,
-            context: list[str],
-            choices: list[Scenario.Choice]
-    ) -> Scenario.Choice|None:
-        print(f"{F_ITALIC}{"\n".join(context)}{F_RESET}")
-        if len(choices) == 0:
-            return None # no options
-
-        print(f"\n{F_BOLD}What do you do?{F_RESET}\n")
-        for i, choice in enumerate(choices):
-            print(f"{i+1}. {choice.text}")
-        while True:
-            user_input = input("> ")
-            try:
-                idx = int(user_input) - 1
-                if 0 <= idx < len(choices):
-                    choice = choices[idx]
-                    return choice
-            except ValueError:
-                pass
