@@ -29,6 +29,7 @@ def choose_file(path: str) -> str:
                 return f"{path}/{filenames[idx]}"
         except ValueError: pass
 
+
 # main
 
 def main():
@@ -36,9 +37,6 @@ def main():
     print("\n\n***\n\n")
     adventure = Adventure(filename)
     adventure.begin()
-
-
-# main
 
 if __name__ == '__main__':
     print("\n" * 2)
