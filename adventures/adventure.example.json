@@ -166,7 +166,7 @@
       "context": [
         "And you go numb.",
         "",
-        "It deteriorates - what remains of your sense of self.",
+        "It deteriorates - what remained of your sense of self.",
         "Although, you feel as though you must allow it to happen.",
         "",
         "You must submit.",
@@ -212,8 +212,8 @@
     "main_hall": {
       "context": [
         "That dim, orange twilight which once lit the room has now faded.",
-        "All else remains changed; the hall is still.",
-        "You are afraid."
+        "Your judgement now unclouded, you see that all else remains changed.",
+        "The hall is still."
       ],
       "choices": [
         {
