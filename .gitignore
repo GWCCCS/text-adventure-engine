@@ -1,5 +1,5 @@
-**/.idea/*.*
-**/__pycache__/*.*
-/.venv/*.*
+**/.idea/**/*.*
+**/__pycache__/**/*.*
+/.venv/**/*.*
 /adventures/*.json
 !/adventures/*.example.json
