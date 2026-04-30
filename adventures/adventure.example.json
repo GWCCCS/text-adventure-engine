@@ -12,13 +12,13 @@
       ],
       "choices": [
         {
-          "text":      "Enter the cathedral.",
+          "text": "Enter the cathedral.",
           "follow_up": "You enter.",
 
           "next": "main_hall-start"
         },
         {
-          "text":      "Do not.",
+          "text": "Do not.",
 
           "hide_if": "resisted-0",
 
@@ -248,11 +248,11 @@
             "",
             "Directly in front, a sea of wooden benches.",
             "It parts in the center, and leads to the sanctuary.",
-            "A golden book lies upon the its altar.",
+            "A golden book lies upon its altar.",
             "",
             "To your right, the haunting stained-glass window.",
             "The depiction focuses on an individual gripping a torch.",
-            "You perceive an unkind glow from the person",
+            "You perceive an unkind glow from the person.",
             "It betrays the setting sun."
           ],
 
