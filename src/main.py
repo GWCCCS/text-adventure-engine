@@ -36,7 +36,8 @@ def main():
     filename = choose_file(ADVENTURES_DIR)
     print("\n\n***\n\n")
     adventure = Adventure(filename)
-    adventure.begin()
+    while True:
+        adventure.begin()
 
 if __name__ == '__main__':
     print("\n" * 2)
