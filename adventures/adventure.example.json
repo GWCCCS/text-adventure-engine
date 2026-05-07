@@ -1,7 +1,9 @@
 {
   "__meta__": {
-    "title":        "\"For Example\"",
-    "subtitle":     "The Exemplary Journey."
+    "title":    "\"For Example\"",
+    "subtitle": "The Exemplary Journey.",
+
+    "prompt_end": "Play again? Press enter..."
   },
 
   "__main__": {
